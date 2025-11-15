@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useMusic } from '../contexts/MusicContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -179,9 +180,8 @@ const Home: React.FC = () => {
                 {recentLibraryItems.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {recentLibraryItems.slice(0, 6).map(item => {
-                            // FIX: Use a type-safe id that correctly handles different LibraryItem types.
                             const id = 'id' in item ? item.id : item.name;
-                            return <QuickLinkCard key={`${id}-${Math.random()}`} item={item} />
+                            return <QuickLinkCard key={id} item={item} />
                         })}
                     </div>
                 )}

@@ -26,7 +26,6 @@ const Library: React.FC = () => {
             items = albums;
         }
         
-        // FIX: Use 'albums' in item as a type guard for Artist, as 'name' is present in all LibraryItem types.
         const pinned = items.filter(item => pinnedItems.has('albums' in item ? item.name : item.id));
         const unpinned = items.filter(item => !pinnedItems.has('albums' in item ? item.name : item.id));
 
@@ -63,7 +62,6 @@ const Library: React.FC = () => {
             
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                 {filteredItems.map(item => (
-                    // FIX: Use a type-safe key that correctly handles different LibraryItem types.
                     <ItemCard key={'id' in item ? item.id : item.name} item={item} />
                 ))}
             </div>

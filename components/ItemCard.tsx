@@ -11,7 +11,6 @@ interface ItemCardProps {
 export const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     const { playSong, songs, pinnedItems, togglePinItem } = useMusic();
 
-    // FIX: Use 'albums' in item as a type guard for Artist, as 'name' is present in all LibraryItem types.
     const getItemId = (item: LibraryItem) => 'albums' in item ? item.name : item.id;
     const getItemType = (item: LibraryItem): LibraryItemType => {
         if ('songs' in item && 'type' in item) return 'album';

@@ -1,16 +1,44 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { HomeIcon, HomeActiveIcon, LibraryIcon, LibraryActiveIcon, PlusIcon, HeartIcon, SearchIcon, PinIcon, MusicIcon } from './Icons';
+import { HomeIcon, HomeActiveIcon, LibraryIcon, LibraryActiveIcon, PlusIcon, HeartIcon, SearchIcon, PinIcon, MusicIcon, UploadCloudIcon } from './Icons';
 import { useMusic } from '../contexts/MusicContext';
 import type { Album, Artist, Playlist, LibraryItemType, LibraryItem } from '../types';
 
 const Sidebar: React.FC = () => {
-    const { playlists, albums, artists, likedSongs, loadFiles, pinnedItems } = useMusic();
+    const { playlists, albums, artists, likedSongs, loadFiles, pinnedItems, createPlaylist } = useMusic();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [filter, setFilter] = useState<LibraryItemType | 'all'>('all');
-    
+    const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+    const addMenuRef = useRef<HTMLDivElement>(null);
+    const addButtonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                addMenuRef.current &&
+                !addMenuRef.current.contains(event.target as Node) &&
+                addButtonRef.current &&
+                !addButtonRef.current.contains(event.target as Node)
+            ) {
+                setIsAddMenuOpen(false);
+            }
+        };
+
+        if (isAddMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isAddMenuOpen]);
+
     const handleAddFilesClick = () => {
         fileInputRef.current?.click();
+    };
+
+    const handleCreatePlaylist = () => {
+        createPlaylist(`My Playlist #${playlists.length + 1}`);
     };
 
     const handleFilesSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,14 +67,12 @@ const Sidebar: React.FC = () => {
             items = albums;
         }
         
-        // FIX: Use 'albums' in item as a type guard for Artist, as 'name' is present in all LibraryItem types.
         const pinned = items.filter(item => pinnedItems.has('albums' in item ? item.name : item.id));
         const unpinned = items.filter(item => !pinnedItems.has('albums' in item ? item.name : item.id));
 
         return [...pinned, ...unpinned];
     }, [filter, allLibraryItems, pinnedItems, playlists, artists, albums]);
     
-    // FIX: Use 'albums' in item as a type guard for Artist, as 'name' is present in all LibraryItem types.
     const getItemId = (item: LibraryItem) => 'albums' in item ? item.name : item.id;
     const getItemType = (item: LibraryItem): LibraryItemType => {
         if ('songs' in item && 'type' in item) return 'album';
@@ -100,10 +126,34 @@ const Sidebar: React.FC = () => {
                         <LibraryIcon />
                         <span>Your Library</span>
                     </div>
-                    <div>
-                        <button onClick={handleAddFilesClick} className="text-zinc-400 hover:text-white transition-colors" title="Add music files">
+                    <div className="relative flex items-center gap-3">
+                        <button ref={addButtonRef} onClick={() => setIsAddMenuOpen(prev => !prev)} className="text-zinc-400 hover:text-white transition-colors" title="Add to library">
                             <PlusIcon />
                         </button>
+                        {isAddMenuOpen && (
+                            <div ref={addMenuRef} className="absolute bottom-full right-0 mb-2 w-56 bg-[#282828] text-white rounded-md shadow-2xl p-1 z-30">
+                                <button
+                                    onClick={() => {
+                                        handleAddFilesClick();
+                                        setIsAddMenuOpen(false);
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-sm rounded-sm hover:bg-[#3e3e3e] flex items-center gap-3"
+                                >
+                                    <UploadCloudIcon size={20} />
+                                    <span>Add music files</span>
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        handleCreatePlaylist();
+                                        setIsAddMenuOpen(false);
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-sm rounded-sm hover:bg-[#3e3e3e] flex items-center gap-3"
+                                >
+                                    <MusicIcon size={20} />
+                                    <span>Create a new playlist</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
