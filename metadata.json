@@ -1,0 +1,5 @@
+{
+  "name": "Localify - Your Local Music Player",
+  "description": "A Spotify-like music player for your local audio files. It supports various formats like FLAC and MP3, organizes your music into albums and artists, and allows you to create playlists and like songs, all while providing a beautiful, functional interface.",
+  "requestFramePermissions": []
+}

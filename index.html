@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-g" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localify - Your Local Music Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsmediatags for reading audio metadata -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <!-- ColorThief for dynamic background colors -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1"
+  }
+}
+</script>
+  <style>
+    :root {
+      --sidebar-width: 20rem; /* 320px */
+    }
+    body {
+      background-color: #000;
+      color: #fff;
+      overflow: hidden; /* Prevent body scroll with fullscreen layout */
+    }
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4a4a4a;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6a6a6a;
+    }
+
+    /* Player progress bar styles */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      background-color: #4d4d4d;
+      border-radius: 0.5rem;
+      height: 0.25rem;
+    }
+    input[type="range"]::-moz-range-track {
+      background-color: #4d4d4d;
+      border-radius: 0.5rem;
+      height: 0.25rem;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -4px;
+      background-color: #fff;
+      border-radius: 50%;
+      height: 12px;
+      width: 12px;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    input[type="range"]::-moz-range-thumb {
+      border: none;
+      border-radius: 50%;
+      background-color: #fff;
+      height: 12px;
+      width: 12px;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    /* Show thumb on hover */
+    .custom-range:hover::-webkit-slider-thumb,
+    .custom-range:hover::-moz-range-thumb {
+      opacity: 1;
+    }
+  </style>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
